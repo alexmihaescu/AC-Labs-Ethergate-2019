@@ -3,12 +3,20 @@ from time import time
 from PIL import Image, ImageDraw, ImageFont
 import numpy as np
 
-buffer_size = 3
-cap = cv2.VideoCapture(0)
-font = ImageFont.truetype('./Blazed.ttf', size=24)
-fps = 0.0
+# The capture object
+# 0 usually means the default camera
+# If you have an external webcam, then try 1 or 2
+cap = cv2.VideoCapture(0) 
 
+# DA FONT
+font = ImageFont.truetype('./Blazed.ttf', size=24)
+
+# This is here only for the first iteration
+fps = 0.0
 prev = cv2.GaussianBlur(cap.read()[1], (7,7), 0.0) # DON'T!
+# Please don't do stuff without checking it.
+# I'm a professional, I'm entitled to do stupid stuff for science!
+# Do what popa says not what popa does. Please.
 
 while cap.isOpened():
 	start = time()
@@ -42,26 +50,34 @@ while cap.isOpened():
 	_, delta_sum = cv2.threshold(delta_sum, 127, 255, cv2.THRESH_BINARY)
 
 	# About this we care about how it looks like
-	cv2.imshow('Sum', delta_sum)
+	cv2.imshow('Sum of deltas', delta_sum)
 
 
 	# DRAWING STUFF
+
+	# Pillow works with RGB images an OpenCV reads them as BGR
 	image = cv2.cvtColor(image, cv2.COLOR_BGR2RGBA)
+
+	# Drawy thingy
 	image = Image.fromarray(image)
 	draw = ImageDraw.Draw(image)
-	
 	draw.text(text=f'{fps:.2f} FPS', xy=(10, 10), fill=(255,255,255), font=font)
 
+	# Converting it back to a format OpenCV understands
 	image = np.array(image)
 
+	# Converting it back to BGR, for OpenCV again
 	image = cv2.cvtColor(image, cv2.COLOR_RGBA2BGR)
 	cv2.imshow('Clean', image)
 
+	# This is necessary, you want this to be here!
 	if cv2.waitKey(40) == 27:
 		break
 	
+	# THE AFTERPARTY
 	prev = blur
 	end = time()
 	fps = 1.0/(end-start)
 
-cap.release()
+# It's nice to free stuff
+cap.release() 
