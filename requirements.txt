@@ -4,3 +4,4 @@ opencv-contrib-python
 imutils
 matplotlib
 pillow
+scikit-image
