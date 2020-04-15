@@ -22,6 +22,7 @@ while cap.isOpened():
 	start = time()
 	ret, image = cap.read()
 	if not ret: # It means that capture failed
+		# See? Checking is good
 		print('That\'s unfortunate.')
 		break
 
@@ -65,6 +66,15 @@ while cap.isOpened():
 
 	# Converting it back to a format OpenCV understands
 	image = np.array(image)
+
+	# Almost cool overlay
+	overlay_color = (255, 102, 255)
+	alpha=0.7
+	overlay = np.zeros_like(image)
+	for i in range(3):
+		overlay[:,:,i] = np.where(delta_sum == 255, overlay_color[i], 0)
+		# It turns out pink?
+	image = cv2.addWeighted(overlay, 1, image, 1, 0)
 
 	# Converting it back to BGR, for OpenCV again
 	image = cv2.cvtColor(image, cv2.COLOR_RGBA2BGR)
