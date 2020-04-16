@@ -5,3 +5,6 @@ imutils
 matplotlib
 pillow
 scikit-image
+seaborn
+scikit-learn 
+scipy
