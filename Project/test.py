@@ -6,6 +6,9 @@ from imutils import grab_contours, resize
 from imutils.object_detection import non_max_suppression
 from PIL import Image, ImageDraw, ImageFont
 
+
+
+faceCascade = cv2.CascadeClassifier("/home/cristina/Desktop/AC Labs/AC-Labs-Ethergate-2019/Sessions/Session 4/haarcascade_frontalface_default.xml")
 # The capture object
 # 0 usually means the default camera
 # If you have an external webcam, then try 1 or 2
@@ -26,6 +29,7 @@ prev = resize(cap.read()[1], width=400) # DON'T!
 # Do what popa says not what popa does. Please.
 
 while cap.isOpened():
+
 	start = time()
 	ret, image = cap.read()
 	if not ret: # It means that capture failed
@@ -88,6 +92,25 @@ while cap.isOpened():
 			colors.append((0, 255, 0))
 
 # AND ENDS HERE
+
+
+#	SESSION 4 STARTS HERE
+	
+	gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
+	faces = faceCascade.detectMultiScale(
+		gray_image,
+		scaleFactor = 1.3,
+		minNeighbors = 6,
+		minSize= (40,40)
+	)
+
+	for (x,y,w,h) in faces:
+		cv2.rectangle(image, (x,y), (x+w,y+h), (0,255,0),2)
+	
+	cv2.imshow('Face Detection', image)
+
+# END SESSION 4
 
 	# DRAWING STUFF
 
